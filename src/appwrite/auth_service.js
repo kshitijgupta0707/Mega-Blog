@@ -7,10 +7,12 @@ export class AuthService {
   account;
 
   constructor() {
-    this.client
-      .setEndpoint(conf.appwriteUrl)
-      .setProject(conf.appwriteProjectId);
-    this.account = new Account(client);
+    let result = this.client
+    .setEndpoint(conf.appwriteUrl)
+    .setProject(conf.appwriteProjectId);
+    let result2 = this.account = new Account(this.client);
+    // console.log( result);
+    console.log( result2);
   }
   async createAccount({ email, password, name }) {
     try {
@@ -41,9 +43,15 @@ export class AuthService {
 
   async getCurrentUser() {
     try {
-      await this.account.get();
+      // Check if there is an active session
+      const sessions = await this.account.getSession("current");
+      if (sessions) {
+        // If session exists, get user details
+        const user = await this.account.get();
+        return user;
+      }
     } catch (error) {
-      console.log("Appwrite serice :: getCurrentUser :: error", error);
+      console.log("Appwrite service :: getCurrentUser :: error", error);
     }
     return null;
   }
@@ -58,14 +66,14 @@ export class AuthService {
   }
   async updatePassword(oldP, newP) {
     try {
-      const result = await account.updatePassword(newP, oldP);
+      const result = await this.accountaccount.updatePassword(newP, oldP);
     } catch (error) {
       console.log("Appwrite serice :: Update Password :: error", error);
     }
   }
   //password recovery
   //login by number
-//   yh sb krna hain
+  //   yh sb krna hain
 }
 const authService = new AuthService();
 
