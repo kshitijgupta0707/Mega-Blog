@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import authService from './appwrite/auth_service'
 import { login, logout } from './store/authSlice'
 import { Header, Footer } from './components/index'
+import { Outlet } from 'react-router-dom';
 import conf from './conf/config';
 function App() {
   //you can do conditional rendoring on the basis of loading
@@ -26,27 +27,17 @@ function App() {
     }).finally(() => { setLoading(false) });
   }, [])
 
-  if (loading) {
-    return (
-      <div className=' min-h-screen flex flex-wrap bg-gray-700 content-between' >
-        <div className=" w-full block">
-          <Header />
-          <main>
-            {/* todo */}
-            {/* <>outlet</> */}
-          </main>
-          <Footer />
-        </div>
+  return !loading ? (
+    <div className='min-h-screen flex flex-wrap content-between bg-gray-400'>
+      <div className='w-full block'>
+        <Header />
+        <main>
+          TODO:  <Outlet />
+        </main>
+        <Footer />
       </div>
-    )
-  }
-    else {
-       return (
-          <div  className='bg-red-500' >
-            done
-          </div>    
-      )
-    }
+    </div>
+  ) : null
 
 }
 
